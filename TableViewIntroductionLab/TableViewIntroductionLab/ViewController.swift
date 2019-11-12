@@ -12,7 +12,7 @@ class ViewController: UIViewController {
 
     @IBOutlet weak var taskListTableView: UITableView!
     
-    private var taskItems = [Task.allTasks] {
+    private var tasks = Task.allTasks {
         didSet {
             taskListTableView.reloadData()
         }
@@ -29,20 +29,26 @@ class ViewController: UIViewController {
 
 extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return taskItems[section].count
+        return tasks.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "TaskCell", for: indexPath)
         
-        let currentTask = taskItems[indexPath.section][indexPath.row]
-        
-        cell.textLabel?.text = currentTask.name
-        cell.detailTextLabel?.text = currentTask.dueDate.description
-        
+        let task = tasks[indexPath.row]
+        cell.textLabel?.text = task.name
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "en")
+        dateFormatter.dateFormat = "EEEE, MMM d, yyyy h:mm a zzzz"
+        let dateAsString = dateFormatter.string(from: task.dueDate)
+        cell.detailTextLabel?.text = dateAsString
         
         return cell
     }
+    
+//    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+//
+//    }
     
     
 }
